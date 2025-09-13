@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Order Request</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-2xl border border-gray-200">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">Maintenance Order Request</h1>
+        <p class="text-center text-gray-500 mb-6">Fill out the form below to submit a request.
+            <br>
+            
+        </p>
+        
+        <form id="parts-form" class="space-y-4">
+            <div class="space-y-2">
+                <label for="user-name" class="block text-sm font-medium text-gray-700">Person Requesting Service</label>
+                <select id="user-name" name="user-name" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    <option value="" disabled selected>Select a person</option>
+                    <option value="Brandon Hatfield">Brandon Hatfield</option>
+                    <option value="Iesha Coatney">Iesha Coatney</option>
+                    <option value="Jessica Baez">Jessica Baez</option>
+                    <option value="Karen Green">Karen Green</option>
+                    <option value="Nicole Filburn">Nicole Filburn</option>
+                    <option value="Shawn Thomas">Shawn Thomas</option>
+                    <option value="Tonya Johnson">Tonya Johnson</option>
+                </select>
+            </div>
+            
+            <div class="space-y-2">
+                <label for="urgency" class="block text-sm font-medium text-gray-700">Urgency</label>
+                <select id="urgency" name="urgency" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    <option value="" disabled selected>Select urgency</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Emergency">Emergency</option>
+                </select>
+            </div>
+            
+            <div class="space-y-2">
+                <label for="home-address" class="block text-sm font-medium text-gray-700">Community</label>
+                <select id="community-select" name="community" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    <option value="" disabled selected>Select your community</option>
+                    <option value="Rancho Serenidad">Rancho Serenidad</option>
+                    <option value="Villas De Mariposa">Villas De Mariposa</option>
+                    <option value="Brazos Point">Brazos Point</option>
+                    <option value="Solena">Solena</option>
+                    <option value="Other">Other (Please specify)</option>
+                </select>
+            </div>
+            
+            <div id="other-community-div" class="space-y-2 hidden">
+                <label for="other-community" class="block text-sm font-medium text-gray-700">Specify Community</label>
+                <input type="text" id="other-community" name="home-address" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+            </div>
+            <div class="space-y-2">
+                <label for="lot-number" class="block text-sm font-medium text-gray-700">Lot Number</label>
+                <input type="text" id="lot-number" name="lot-number" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+            </div>
+            <div class="space-y-2">
+                <label for="serial-number" class="block text-sm font-medium text-gray-700">Serial Number</label>
+                <input type="text" id="serial-number" name="serial-number" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+            </div>
+            
+            <div class="space-y-2">
+                <label for="home-manufacturer" class="block text-sm font-medium text-gray-700">Home Manufacturer</label>
+                <select id="home-manufacturer" name="home-manufacturer" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                    <option value="" disabled selected>Select a manufacturer</option>
+                    <option value="CAVCO/Fleetwood">CAVCO/Fleetwood</option>
+                    <option value="Champion Homes">Champion Homes</option>
+                    <option value="Clayton Athens">Clayton Athens</option>
+                    <option value="Clayton Bonham">Clayton Bonham</option>
+                    <option value="Clayton Southern Energy">Clayton Southern Energy</option>
+                    <option value="Clayton Sulphur Springs">Clayton Sulphur Springs</option>
+                    <option value="Clayton Waco1">Clayton Waco1</option>
+                    <option value="Jessup">Jessup</option>
+                    <option value="New Vision">New Vision</option>
+                    <option value="Oak Creek">Oak Creek</option>
+                    <option value="RGN">RGN</option>
+                </select>
+            </div>
+            
+            <div id="parts-container" class="space-y-6 mt-6">
+            </div>
+            
+            <div class="flex space-x-4">
+                <button type="button" id="add-part-btn" class="w-full py-2 px-4 bg-gray-200 hover:bg-gray-300 rounded-full text-gray-700 font-semibold text-sm transition duration-150 ease-in-out">
+                    Add Additional Service
+                </button>
+            </div>
+            
+            <div class="mt-6">
+                <button type="submit" id="submit-btn" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 rounded-full text-white font-bold text-lg transition duration-150 ease-in-out shadow-lg">
+                    Submit Request
+                </button>
+            </div>
+        </form>
+
+        <div id="status-message" class="mt-6 p-4 rounded-lg text-center hidden"></div>
+    </div>
+
+    <script>
+        (function() {
+            const USER_ID = 'bSgwpRuVeEky48mPe'; 
+            const SERVICE_ID = 'service_7lbsq24';
+            const TEMPLATE_ID = 'template_dvr6oem';
+
+            const form = document.getElementById('parts-form');
+            const communitySelect = document.getElementById('community-select');
+            const otherCommunityDiv = document.getElementById('other-community-div');
+            const otherCommunityInput = document.getElementById('other-community');
+            const urgencySelect = document.getElementById('urgency'); // New element
+            const statusDiv = document.getElementById('status-message');
+            const submitBtn = document.getElementById('submit-btn');
+            const userNameSelect = document.getElementById('user-name');
+            const partsContainer = document.getElementById('parts-container');
+            const addPartBtn = document.getElementById('add-part-btn');
+            const formMainContent = document.querySelector('form');
+
+            let partCounter = 0;
+
+            const partLocations = [
+                "Exterior", 
+                "Primary Bedroom",
+                "Primary Bathroom",
+                "Bedroom #2",
+                "Bedroom #3",
+                "Bedroom #4",
+                "Flex Space",
+                "Hall",
+                "Guest Bath",
+                "Living Area",
+                "Laundry Area",
+                "Dining Area",
+                "Kitchen",
+                "Pantry"
+            ];
+            
+            function addPartEntry() {
+                partCounter++;
+                const partDiv = document.createElement('div');
+                partDiv.classList.add('part-entry', 'bg-gray-50', 'p-4', 'rounded-lg', 'border', 'border-gray-200', 'space-y-2');
+                
+                partDiv.innerHTML = `
+                    <h3 class="font-semibold text-gray-700">${partCounter === 1 ? 'Service Requested' : `Service Requested #${partCounter}`}</h3>
+                    <div class="space-y-2">
+                        <label for="part-description-${partCounter}" class="block text-sm font-medium text-gray-700">Service Description</label>
+                        <textarea id="part-description-${partCounter}" name="part-description-${partCounter}" rows="2" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"></textarea>
+                    </div>
+                    <div class="space-y-2">
+                        <label for="part-location-${partCounter}" class="block text-sm font-medium text-gray-700">Location of Issue</label>
+                        <select id="part-location-${partCounter}" name="part-location-${partCounter}" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+                            <option value="" disabled selected>Select location</option>
+                            ${partLocations.map(location => `<option value="${location}">${location}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+                partsContainer.appendChild(partDiv);
+            }
+
+            function removePartEntry() {
+                const parts = partsContainer.querySelectorAll('.part-entry');
+                if (parts.length > 1) {
+                    const lastPart = parts[parts.length - 1];
+                    partsContainer.removeChild(lastPart);
+                    partCounter--;
+                }
+            }
+
+            function resetForm() {
+                form.reset();
+                partsContainer.innerHTML = '';
+                partCounter = 0;
+                addPartEntry();
+                statusDiv.classList.add('hidden');
+                otherCommunityDiv.classList.add('hidden');
+                otherCommunityInput.required = false;
+                otherCommunityInput.name = 'unused';
+                formMainContent.style.display = 'block';
+            }
+
+            addPartEntry();
+
+            addPartBtn.addEventListener('click', addPartEntry);
+            
+            communitySelect.addEventListener('change', (event) => {
+                if (event.target.value === 'Other') {
+                    otherCommunityDiv.classList.remove('hidden');
+                    otherCommunityInput.required = true;
+                    otherCommunityInput.name = 'home-address';
+                } else {
+                    otherCommunityDiv.classList.add('hidden');
+                    otherCommunityInput.required = false;
+                    otherCommunityInput.name = 'unused';
+                }
+            });
+
+            emailjs.init(USER_ID);
+
+            document.getElementById('parts-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                formMainContent.style.display = 'none';
+                statusDiv.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'bg-red-100', 'text-red-800');
+                statusDiv.classList.add('bg-blue-100', 'text-blue-800');
+                statusDiv.innerHTML = 'Sending request...';
+                
+                submitBtn.disabled = true;
+                
+                const partDescriptions = document.querySelectorAll('[name^="part-description-"]');
+                const partLocations = document.querySelectorAll('[name^="part-location-"]');
+                let partsString = '';
+                for (let i = 0; i < partDescriptions.length; i++) {
+                    partsString += `Service Requested #${i + 1}:\n`;
+                    partsString += `  Location of Issue: ${partLocations[i].value}\n`;
+                    partsString += `  Service Description: ${partDescriptions[i].value}\n\n`;
+                }
+
+                const emailParams = {
+                    'user-name': form.elements['user-name'].value,
+                    'urgency': urgencySelect.value, // New variable
+                    'home-address': communitySelect.value === 'Other' ? otherCommunityInput.value : communitySelect.value,
+                    'lot-number': form.elements['lot-number'].value,
+                    'serial-number': form.elements['serial-number'].value,
+                    'home-manufacturer': form.elements['home-manufacturer'].value,
+                    'part-description': partsString,
+                };
+                
+                emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams)
+                    .then(function() {
+                        statusDiv.classList.remove('bg-blue-100', 'text-blue-800');
+                        statusDiv.classList.add('bg-green-100', 'text-green-800');
+                        statusDiv.innerHTML = '<strong>Success!</strong> Your request has been sent. <br><br> <button id="continue-btn" class="py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded-full text-white font-bold transition duration-150 ease-in-out">Continue</button>';
+                        
+                        document.getElementById('continue-btn').addEventListener('click', resetForm);
+                    }, function(error) {
+                        statusDiv.classList.remove('bg-blue-100', 'text-blue-800');
+                        statusDiv.classList.add('bg-red-100', 'text-red-800');
+                        statusDiv.innerHTML = `<strong>Failed!</strong> There was an error sending your request. Error: ${JSON.stringify(error)}`;
+                        console.error('EmailJS Error:', error);
+                        formMainContent.style.display = 'block';
+                    })
+                    .finally(() => {
+                        submitBtn.disabled = false;
+                    });
+            });
+        })();
+    </script>
+</body>
+</html>

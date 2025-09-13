@@ -113,12 +113,13 @@
             const USER_ID = 'bSgwpRuVeEky48mPe'; 
             const SERVICE_ID = 'service_7lbsq24';
             const TEMPLATE_ID = 'template_dvr6oem';
+            const SECONDARY_EMAIL = 'parts@peakmhc.com'; // <-- IMPORTANT: Add the second email address here.
 
             const form = document.getElementById('parts-form');
             const communitySelect = document.getElementById('community-select');
             const otherCommunityDiv = document.getElementById('other-community-div');
             const otherCommunityInput = document.getElementById('other-community');
-            const urgencySelect = document.getElementById('urgency'); // New element
+            const urgencySelect = document.getElementById('urgency');
             const statusDiv = document.getElementById('status-message');
             const submitBtn = document.getElementById('submit-btn');
             const userNameSelect = document.getElementById('user-name');
@@ -227,12 +228,13 @@
 
                 const emailParams = {
                     'user-name': form.elements['user-name'].value,
-                    'urgency': urgencySelect.value, // New variable
+                    'urgency': urgencySelect.value,
                     'home-address': communitySelect.value === 'Other' ? otherCommunityInput.value : communitySelect.value,
                     'lot-number': form.elements['lot-number'].value,
                     'serial-number': form.elements['serial-number'].value,
                     'home-manufacturer': form.elements['home-manufacturer'].value,
                     'part-description': partsString,
+                    'secondary_email': SECONDARY_EMAIL // New variable for the second recipient
                 };
                 
                 emailjs.send(SERVICE_ID, TEMPLATE_ID, emailParams)
